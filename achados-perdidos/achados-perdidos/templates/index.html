@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achados e Perdidos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>🔎 Achados e Perdidos</h1>
+
+    <section class="formulario">
+        <h2>Cadastrar item</h2>
+
+        <form action="/cadastrar" method="POST">
+            <label>Tipo:</label>
+            <select name="tipo" required>
+                <option value="Perdidos">Perdido</option>
+                <option value="Encontrados">Encontrado</option>
+            </select>
+
+            <label>Nome do item:</label>
+            <input type="text" name="nome" required>
+
+            <label>Descrição:</label>
+            <textarea name="descricao" required></textarea>
+
+            <label>Local:</label>
+            <input type="text" name="local" required>
+
+            <label>Contato:</label>
+            <input type="text" name="contato" required>
+
+            <button type="submit">Cadastrar item</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Itens cadastrados</h2>
+
+        <div class="filtros">
+            <a href="/?filtro=Todos">Todos</a>
+            <a href="/?filtro=Perdidos">Perdidos</a>
+            <a href="/?filtro=Encontrados">Encontrados</a>
+        </div>
+
+        {% if itens %}
+            {% for item in itens %}
+            <div class="item">
+                <h3>{{ item[2] }}</h3>
+                <p><strong>Tipo:</strong> {{ item[1] }}</p>
+                <p><strong>Descrição:</strong> {{ item[3] }}</p>
+                <p><strong>Local:</strong> {{ item[4] }}</p>
+                <p><strong>Contato:</strong> {{ item[5] }}</p>
+                <p><strong>Status:</strong> {{ item[6] }}</p>
+
+                {% if item[6] != "Resolvido" %}
+                    <a href="/resolver/{{ item[0] }}">
+                        <button>Marcar como resolvido</button>
+                    </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhum item encontrado.</p>
+        {% endif %}
+    </section>
+
+</body>
+</html>
